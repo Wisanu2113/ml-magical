@@ -55,13 +55,13 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(640, 480, WEBGL);
+  createCanvas(1600, 600, WEBGL);
   video = createCapture(VIDEO);
-  video.size(640, 480);
+  video.size(800, 600);
   video.hide();
 
   // Initialize shader texture
-  shaderTexture = createGraphics(640, 480, WEBGL);
+  shaderTexture = createGraphics(800, 600, WEBGL);
   shaderTexture.noStroke();
 
   // Start detecting hands
@@ -73,14 +73,14 @@ function draw() {
 
   // Draw the webcam video
   texture(video);
-  rect(-width / 2, -height / 2, width, height);
+  rect(0, -height / 2, 800, 600);
 
   // Process shader
   if (hands.length > 0) {
     let hand = hands[0]; // Process only the first hand
     for (let j = 0; j < hand.keypoints.length; j++) {
       let keypoint = hand.keypoints[j];
-      trail.push([map(keypoint.x, 0, width, 0, 1), map(keypoint.y, 0, height, 1, 0)]);
+      trail.push([map(keypoint.x, 0, 640, 0, 1)+0.3, map(keypoint.y, 0, 480, 1, 0) + 0.6]);
     }
 
     // Trim the trail size
@@ -90,13 +90,13 @@ function draw() {
 
     // Render shader
     shaderTexture.shader(theShader);
-    theShader.setUniform("resolution", [width, height]);
+    theShader.setUniform("resolution", [800, 600]);
     theShader.setUniform("trailCount", trail.length);
     theShader.setUniform("trail", flattenTrail(trail));
 
-    shaderTexture.rect(0, 0, width, height);
+    shaderTexture.rect(0, 0, 800, 600);
     texture(shaderTexture);
-    rect(-width / 2, -height / 2, width, height);
+    rect(-width / 2, -height / 2, 800, 600);
   }
 }
 
