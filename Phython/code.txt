@@ -1,0 +1,8 @@
+async def send_gesture(gesture):
+    try:
+        async with websockets.connect(WS_URL) as websocket:
+            await websocket.send(gesture)
+            print(f"Sent: {gesture}")
+    except Exception as e:
+        print(f"WebSocket Error: {e}")
+        await asyncio.sleep(1)  # ลองใหม่หลังจากดีเลย์
